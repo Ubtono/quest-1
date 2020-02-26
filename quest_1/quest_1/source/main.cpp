@@ -19,8 +19,8 @@ int main (int argc, char *argv[]){
 	Object objects[maxObjects];
 
 	//Initialize the game's data source
-	string gameFile ("./Assets/Config/game.txt");
-
+	string gameFile = "C:\\Users\Destructicator\Documents\GitHub\quest-1-Ubtono\quest_1\quest_1\assets\Config\game.txt";
+																						
 	//Task 2: Load block structure from a file
     int numObjects = loadBlockData(gameFile, objects, gui);
 
@@ -38,7 +38,6 @@ int main (int argc, char *argv[]){
 				quit=true;
 			}
 		}
-
         gui.displayGameState(numObjects, objects);
 	}
 

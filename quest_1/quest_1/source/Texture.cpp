@@ -2,7 +2,6 @@
 #include "Texture.h"
 
 using namespace std;
-
 Texture::Texture () {
 	width = 0;
 	height = 0;
