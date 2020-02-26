@@ -30,56 +30,17 @@ int loadBlockData(
 	const GUI& p_gui)
 {
 	fs.open(p_gameFile, std::fstream::in | std::fstream::out);
-	int index = 0;
-	while (fs) {
-		Object currObject = p_objects[index];
+	int i = 0;
+	for (i; ((i < p_gameFile.size()) && (!fs.eof())); ++i) {
+		Object currObject = p_objects[i];
 		int numData{ -1 };
 		fs >> numData;
 		currObject.spriteID = numData;
 		currObject.type = static_cast<Type>(numData);
-
-		index++;
 	}
-
-
-	return index + 1;
+	return i;
 }
-	/*
-	char c;
-	int numObjects{ 0 };
-	if (fs.is_open()) {
-		int col;
-		int row{ 0 };
-		while (!fs.eof()) {
-			for (col = 0; col < p_gui.numColumns; col++) {
-				fs >> c;
 
-				if (c == 1) {
-					p_objects[numObjects].top = true;
-				}
-				else {
-					p_objects[numObjects].top = false;
-				}
-				p_objects[numObjects].type = static_cast<Type>(c);
-				p_objects[numObjects].position.x = col;
-				p_objects[numObjects].position.y = row;
-
-
-				//p_objects[numObjects].dimensions = new Dimensions();
-				//p_objects[numObjects].dimensions->getObjectDimensions(p_objects[numObjects]);
-
-				p_objects[numObjects].dimensions = GUI::getObjectDimensions(p_objects[numObjects]);
-
-				numObjects++;
-			}
-			row++;			
-			//p_objects[numObjects].dimensions = { row, col };
-		}
-	} 
-
-    return numObjects;	
-}
-*/
 /*
 	-- randomPlayerData   --
 	Parameters:
