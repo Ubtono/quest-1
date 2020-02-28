@@ -24,23 +24,54 @@ std::ifstream fs;
 	loadBlockData will read the p_gameFile and update the objects in
 	p_objects with the appropriate data.
 */
+
+/*
+position = {
+column * p_objects[i].dimensions.width;
+rows * p_objects[i].dimensions.height;
+*/
 int loadBlockData(
 	const std::string& p_gameFile,
 	Object p_objects[],
-	const GUI& p_gui)
+	const GUI& p_gui) 
 {
+	//auto size = p_objects.size();
 	fs.open(p_gameFile, std::fstream::in | std::fstream::out);
-	int i = 0;
-	for (i; ((i < p_gameFile.size()) && (!fs.eof())); ++i) {
-		Object currObject = p_objects[i];
-		int numData{ -1 };
-		fs >> numData;
-		currObject.spriteID = numData;
-		currObject.type = static_cast<Type>(numData);
+
+	int objectIndex = 0;
+	int numData = -1;
+	Object currObject = p_objects[objectIndex];
+	for (int rowId = 0; rowId < 10; rowId++) {
+		for (int colId = 0; colId < 10; colId++) {
+			fs >> numData;
+			currObject.type = static_cast<Type>(numData);
+			currObject.position.x = colId * p_gui.getObjectDimensions(currObject).width;
+			//std::cout << "X position: " << p_gui.getObjectDimensions(currObject).height << std::endl;
+			currObject.position.y = rowId * p_gui.getObjectDimensions(currObject).height;
+			
+			objectIndex++;
+			colId++;
+		}
+		rowId++;
 	}
-	return i;
+	return objectIndex;
 }
 
+	/*
+	int i = 0;
+	char numData{ 'c' };
+	Object* pntr = new Object();
+	for (i; i < size; i++) {
+		//std::cout << "End of file not yet reached" << std::endl;
+		fs >> numData;
+		//How can I access the size of the vector
+		Object currObject = p_objects[i];
+		currObject.type = static_cast<Type>(numData);
+		//i++;
+		}
+	return i;
+}
+*/
 /*
 	-- randomPlayerData   --
 	Parameters:
@@ -56,18 +87,24 @@ int loadBlockData(
 			The player cannot be in the air for instance
 			The player cannot be underground
 */
-void randomPlayerData (
+void randomPlayerData ( //INFINITE LOOP
     const int p_numObjects,
     Object p_objects[],
     const GUI & p_gui) 
 {
-	Object player = p_objects[0];
+	Object player;
 	while (!player.top) {
 		player.position.x = rand() % p_gui.numColumns;
-		player.position.y = getMaxYOfBlock(player, p_objects, p_numObjects);
+		player.position.y = rand() % p_gui.numRows;
+		player.dimensions.height = getMaxYOfBlock(player, p_objects, p_numObjects);
 		player.spriteID = rand() % 100;
+		
+		if (player.type == static_cast<Type>(0)) {
+			player.top = true;
+		}
 	}
 }
+
 
 /*
 	-- getMaxYOfBlock --

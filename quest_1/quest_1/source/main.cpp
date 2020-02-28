@@ -1,4 +1,4 @@
-
+// JUST GET THE BLOCK DATA RENDERED AT LEAST
 #include <cstdlib>
 #include <ctime>
 #include <string>
@@ -19,16 +19,19 @@ int main (int argc, char *argv[]){
 	Object objects[maxObjects];
 
 	//Initialize the game's data source
-	string gameFile = "C:\\Users\Destructicator\Documents\GitHub\quest-1-Ubtono\quest_1\quest_1\assets\Config\game.txt";
+	string gameFile = "C:\\Users\Destructicator\Documents\GitHub\quest-1-Ubtono\quest_1\quest_1\Assets\Config\game.txt";
 																						
 	//Task 2: Load block structure from a file
     int numObjects = loadBlockData(gameFile, objects, gui);
-
-	//Task 3: Randomize Samus Sprite Appearance
+	cout << numObjects;										 //should return 295
+	//Task 3: Randomize Samus Sprite Appearance //INFINITE LOOP
 	numObjects++;
-	objects[0].type = Type::player;  // this is just a placeholder
-	randomPlayerData(numObjects, objects, gui);
+	Object player = objects[maxObjects - 1];
+	player.type = Type::player;
+	cout << getMaxYOfBlock(objects[0], objects, numObjects); // should return 
 
+	randomPlayerData(numObjects, objects, gui);
+	
 	bool quit = false;
 	while (quit == false) {
 		//GUI waits for mouse events
@@ -41,5 +44,6 @@ int main (int argc, char *argv[]){
         gui.displayGameState(numObjects, objects);
 	}
 
+	cout << numObjects;
 	return 0;
 }
