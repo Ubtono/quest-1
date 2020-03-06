@@ -2,7 +2,7 @@
 #define OBJECT_H
 
 enum class Type {
-    none,
+    none=1,
     block,
     belowBlock,
     belowBlock2,

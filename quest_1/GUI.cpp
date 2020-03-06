@@ -243,13 +243,14 @@ void GUI::displayGameState(const int numObjects, const Object objects[]){
 	SDL_RenderClear(renderer);
 
     //Render Blocks
-	for (int i=0; i < numObjects; i++) {
-		if (objects[i].type == Type::player) {
+	for (int i = 0; i < numObjects; i++) {
+		if (objects[i].type == Type::player)
+		{
 			//Render Player
 			objectTextures[objects[i].type]->render(renderer, objects[i].position.x, objects[i].position.y, &simonClips[objects[i].spriteID]);
 		}
-		else if (objects[i].type == Type::none){}
-        else {
+		else
+		{
 			//render anything else!
 			objectTextures[objects[i].type]->render(renderer, objects[i].position.x, objects[i].position.y, NULL);
 		}
@@ -262,7 +263,7 @@ void GUI::displayGameState(const int numObjects, const Object objects[]){
 
 Dimensions GUI::getObjectDimensions(const Object & object) const
 {
-	Dimensions dimension;
+	Dimensions dimension{ 0, 0 };
 	if (object.type == Type::player)
 	{
 		dimension.width = simonClips[object.spriteID].w;

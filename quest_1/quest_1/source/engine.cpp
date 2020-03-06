@@ -39,20 +39,36 @@ int loadBlockData(
 	fs.open(p_gameFile, std::fstream::in | std::fstream::out);
 
 	int objectIndex = 0;
-	int numData = -1;
-	Object currObject = p_objects[objectIndex];
-	for (int rowId = 0; rowId < 10; rowId++) {
-		for (int colId = 0; colId < 10; colId++) {
+	int numData;
+	Object* newObject = new Object();
+	for (int rowId = 1; rowId <= p_gui.numRows; rowId++) {
+		for (int colId = 1; colId <= p_gui.numColumns; colId++) {
 			fs >> numData;
-			currObject.type = static_cast<Type>(numData);
-			currObject.position.x = colId * p_gui.getObjectDimensions(currObject).width;
-			//std::cout << "X position: " << p_gui.getObjectDimensions(currObject).height << std::endl;
-			currObject.position.y = rowId * p_gui.getObjectDimensions(currObject).height;
-			
-			objectIndex++;
-			colId++;
+			int blockType = numData + 1;
+
+			if (blockType == 1) {
+				newObject->type = Type::none;
+				newObject->dimensions.height = 16;
+				newObject->dimensions.width = 16;
+				p_objects[objectIndex] = *newObject;
+
+				objectIndex += 1;
+			}
+			else {
+
+				newObject->type = static_cast<Type>(blockType);
+				newObject->dimensions.width = p_gui.getObjectDimensions(*newObject).width;
+				newObject->position.x = newObject->dimensions.width * colId;
+				//std::cout << "X position: " << p_gui.getObjectDimensions(currObject).height << std::endl;
+				newObject->dimensions.height = p_gui.getObjectDimensions(*newObject).height;
+				newObject->position.y = newObject->dimensions.height * rowId;
+
+				p_objects[objectIndex] = *newObject;
+
+				objectIndex += 1;
+
+			}
 		}
-		rowId++;
 	}
 	return objectIndex;
 }
@@ -87,22 +103,37 @@ int loadBlockData(
 			The player cannot be in the air for instance
 			The player cannot be underground
 */
-void randomPlayerData ( //INFINITE LOOP
+void randomPlayerData (
     const int p_numObjects,
     Object p_objects[],
     const GUI & p_gui) 
 {
-	Object player;
-	while (!player.top) {
-		player.position.x = rand() % p_gui.numColumns;
-		player.position.y = rand() % p_gui.numRows;
-		player.dimensions.height = getMaxYOfBlock(player, p_objects, p_numObjects);
-		player.spriteID = rand() % 100;
+	int i{ 0 };
+	Object tempplayer = p_objects[i];
+	tempplayer.top = false;
+
+	while (!tempplayer.top) {
+		for (int colID{ 0 }; colID < p_numObjects; colID++) {
 		
-		if (player.type == static_cast<Type>(0)) {
-			player.top = true;
+				tempplayer.position.x = 8;//rand() % GUI::screenDimensions.width;
+				tempplayer.position.y = 8;//rand() % GUI::screenDimensions.height;
+				tempplayer.dimensions.height = 120;//getMaxYOfBlock(player, p_objects, p_numObjects);
+
+
+			for (int rowID{ 0 }; rowID < tempplayer.position.y; rowID++) {
+					if (p_objects[rowID].type != Type::none) {
+						tempplayer.top = false;
+					}
+					else {
+						tempplayer.top = true;
+					}
+			}
+			
 		}
 	}
+	Object player = tempplayer;
+	player.spriteID = rand() % 100;
+	player.type = Type::player;
 }
 
 
@@ -120,5 +151,7 @@ int getMaxYOfBlock (
     const Object objects[],
     int numObjects) 
 {
+
+
 	return player.position.y;
 } 
